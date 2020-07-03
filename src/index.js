@@ -6,14 +6,13 @@
 
 const { Wechaty } = require("wechaty") // Wechaty核心包
 const { PuppetPadplus } = require("wechaty-puppet-padplus") // padplus协议包
-// var express = require('express')
 var mongoose = require('mongoose')
 var schedule = require('node-schedule')
 
 const config = require("./config") // 配置文件
 const onScan = require("./onScan") // 机器人需要扫描二维码时监听回调
 const onRoomJoin = require("./onRoomJoin") // 加入房间监听回调
-const onLogin = require("./onLogin") // 消息监听回调
+const onMessage = require("./onMessage") // 消息监听回调
 
 require("./model/Member")
 require("./model/Room")
@@ -41,10 +40,7 @@ const bot = new Wechaty({
 
 // 注册事件
 bot.on("scan", onScan) // 机器人需要扫描二维码时监听
-bot.on("message", (msg) => {
-  //console.log(msg.text())
-})
-bot.on('login', (user) => onLogin(bot)) // 登录后, 对定时任务进行注册 
+bot.on("message", onMessage)
 bot.on("room-join", onRoomJoin) // 加入房间监听
 bot.start()
 
@@ -83,7 +79,7 @@ schedule.scheduleJob('* * * * *', async () => {
           }).catch((err) => {console.log(err)})
         }
       })
-      console.log('Collected member nickname for: ' + await room.topic())
+      console.log('Collect member nickname for: ' + await room.topic())
     }
   })
 
@@ -114,12 +110,11 @@ schedule.scheduleJob('* * * * *', async function() {
       let illegalNames = []
 
       await room.sync()
-      console.log(await room.topic())
       room.memberAll().then(members=>{
         for (let member of members) {
           room.alias(member).then((nickname) => {
             if (!nickname || (nickname.search(config.pattern) < 0)) {
-              Whitelist.find({'name': nickname}).then((res, err) => {
+              Whitelist.findOne({name: nickname}, function (err, res) {
                 if (err) {console.log(err)}
                 if (!res) {
                   illegalMembers.push(member)
@@ -130,8 +125,9 @@ schedule.scheduleJob('* * * * *', async function() {
           }).catch((err) => {console.log(err)})
         }
       })
-      setTimeout(function() {
+      setTimeout(async function() {
         // room.say(generateAdvice(), ...illegalMembers)
+        console.log('Illegal names in: ' + await room.topic())
         console.log(illegalNames)
       }, 60 * 1000)
     }
@@ -145,8 +141,3 @@ function generateAdvice () {
           '蔚来APP昵称-ES6-京ADXXXXX\n\n' +
           '(未上牌牌请先使用\"京ADXXXXX\")\n'
 }
-
-
-
-
-

@@ -16,10 +16,6 @@ module.exports = async function onMessage(bot, message) {
 
   
   if (room) {
-    if (room.id !== '24788054959@chatroom') {
-      return
-    }
-
     if (text.indexOf("查车牌") === 0 && !isSelf) {
       let list = text.split(' ')
       if (list.length !== 2) {

@@ -40,13 +40,13 @@ const bot = new Wechaty({
 
 // 注册事件
 bot.on("scan", onScan) // 机器人需要扫描二维码时监听
-bot.on("message", onMessage)
+bot.on("message", (msg) => onMessage(bot, msg))
 bot.on("room-join", onRoomJoin) // 加入房间监听
 bot.start()
 
 
 // 每天23:59拉取所有人昵称
-schedule.scheduleJob('* * * * *', async () => {
+schedule.scheduleJob('59 23 * * *', async () => {
   let rooms = []
   let promises = []
   // 清除所有成员
@@ -85,8 +85,8 @@ schedule.scheduleJob('* * * * *', async () => {
 
 })
 
-// 每天早上10点进行提醒 59 9
-schedule.scheduleJob('* * * * *', async function() {
+// 每天早上10点进行提醒
+schedule.scheduleJob('59 9 * * *', async function() {
   let rooms = []
   let promises = []
 

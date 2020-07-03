@@ -5,17 +5,22 @@
  */
 
 // 配置文件
-const config = require("./config")
+var mongoose = require('mongoose')
+require("./model/Room")
+var Room = mongoose.model('Room')
 
 // 进入房间监听回调 room-群聊 inviteeList-受邀者名单 inviter-邀请者
 module.exports = async function onRoomJoin(room, inviteeList, inviter) {
   // 判断配置项群组id数组中是否存在该群聊id
-  if (config.roomList.indexOf(room.id) >= 0) {
-    inviteeList.map(c => {
-      // 发送消息并@
-      room.say(generateWelcome(c.name()), c)
-    })
-  }
+  let p = Room.findOne({roomId: room.id, welcomeWord: true}, function(err, res) {
+    if (err) {console.log(err)}
+    if (res) {
+      inviteeList.map(c => {
+        // 发送消息并@
+        // room.say(generateWelcome(c.name()), c)
+      })
+    }
+  })
 }
 
 function generateWelcome (username) {

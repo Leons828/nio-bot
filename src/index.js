@@ -5,6 +5,7 @@
  */
 
 const { Wechaty } = require("wechaty") // Wechaty核心包
+const { FileBox } = require("file-box")
 const { PuppetPadplus } = require("wechaty-puppet-padplus") // padplus协议包
 var mongoose = require('mongoose')
 var schedule = require('node-schedule')
@@ -126,7 +127,7 @@ schedule.scheduleJob('59 9 * * *', async function() {
         }
       })
       setTimeout(async function() {
-        // room.say(generateAdvice(), ...illegalMembers)
+        room.say(generateAdvice(), ...illegalMembers)
         console.log('Illegal names in: ' + await room.topic())
         console.log(illegalNames)
       }, 60 * 1000)
@@ -134,6 +135,34 @@ schedule.scheduleJob('59 9 * * *', async function() {
     
   })
 })
+
+
+// 每天12:00 提醒签到
+schedule.scheduleJob('0 12 * * *', async () => {
+  // 查看群是否在管理
+  for (let room of await bot.Room.findAll()) {
+    Room.findOne({roomId: room.id, checkinNotice: true}, function(err, res) {
+      if (err) {console.log(err)}
+      if (res) {
+        room.say(FileBox.fromFile('./src/asset/12.jpeg'))
+      }
+    })
+  }
+})
+
+// 每天24:00 提醒签到
+schedule.scheduleJob('1 0 * * *', async () => {
+  // 查看群是否在管理
+  for (let room of await bot.Room.findAll()) {
+    Room.findOne({roomId: room.id, checkinNotice: true}, function(err, res) {
+      if (err) {console.log(err)}
+      if (res) {
+        room.say(FileBox.fromFile('./src/asset/24.jpeg'))
+      }
+    })
+  }
+})
+
 
 function generateAdvice () {
   // 加入房间回复

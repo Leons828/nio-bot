@@ -4,6 +4,7 @@
  * @Desc: 收到消息时的处理
  */
 var mongoose = require('mongoose')
+const config = require("./config") // 配置文件
 require("./model/Member")
 var Member = mongoose.model('Member')
 
@@ -12,7 +13,6 @@ module.exports = async function onMessage(bot, message) {
   const text = message.text().trim()
   const room = message.room()
   const isSelf = message.self()
-  const atSelf = await message.mentionSelf()  
 
   
   if (room) {
@@ -20,36 +20,37 @@ module.exports = async function onMessage(bot, message) {
       return
     }
 
-    // 别人@到我
-    if (atSelf && !isSelf) {
-      if (text.indexOf('车友') > 0) {
-        let list = text.split(' ')
-        let plate = list[list.length -1].toUpperCase()
-        if (plate.length !== 4) {
-          message.say("请您使用后四位进行查询")
-          return
-        }
-        // 搜索
+    if (text.indexOf("查车牌") === 0 && !isSelf) {
+      let list = text.split(' ')
+      if (list.length !== 2) {
+        res = "\n\n查询车牌请发送\n【查车牌 京ADXXXXX】"
+        room.say(res, contact)
+        return
+      }
+      let plate = list[1].toUpperCase()
+      
+      if (plate.search(config.platePattern) >= 0) {
+        // 如果输入的是车牌格式
         Member.find({name: {$regex :plate}}, function (err, members) {
           if (err) {console.log(err)}
           if (members) {
             if (members.length > 0) {
-              let res = '您要找的车友可能是:\n'
+              // 找到了
+              let res = ''
               for (let member of members) {
-                res += member.name + '\n'
-                res += member.groupName + '\n'
+                res += '\n在' + member.groupName + '找到车友: ' + member.name
               }
-              message.say(res)
+              room.say(res, contact)
             } else {
-              message.say('没有找到呢')
+              // 没有找到
+              room.say('\n在京蔚军车友群中未找到 ' + plate + ' 车牌的车友', contact)
             }
           }
         })
       } else {
-        let res = '您说的我听不懂呢, 请参考:\n' +
-        '查询车友: 车友 + 空格 + 车牌号后四位 例:\n' + 
-        '车友 A123'
-        message.say(res)
+        // 如果输入的不为车牌格式
+        res = "\n\n查询车牌请发送\n【查车牌 京ADXXXXX】"
+        room.say(res, contact)
       }
     }
   } else {

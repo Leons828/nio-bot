@@ -17,7 +17,7 @@ module.exports = async function onRoomJoin(room, inviteeList, inviter) {
     if (res) {
       inviteeList.map(c => {
         // 发送消息并@
-        // room.say(generateWelcome(c.name()), c)
+        room.say(generateWelcome(c.name()), c)
       })
     }
   })

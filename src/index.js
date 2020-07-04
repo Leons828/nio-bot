@@ -68,6 +68,7 @@ schedule.scheduleJob('59 23 * * *', async () => {
   // 每个群依次获取所有成员
   Promise.all(promises).then(async ()=>{
     for (let room of rooms) {
+      await room.sync()
       room.memberAll().then(members=>{
         for (let member of members) {
           room.alias(member).then(async (nickname) => {

@@ -25,6 +25,12 @@ module.exports = async function onMessage(bot, message) {
       }
       let plate = list[1].toUpperCase()
       
+      if (plate === '京ADXXXXX') {
+        res = "\n你想累死我吗?那么多没改车牌的![旺柴]"
+        room.say(res, contact)
+        return
+      }
+      
       if (plate.search(config.platePattern) >= 0) {
         // 如果输入的是车牌格式
         Member.find({name: {$regex :plate}}, function (err, members) {

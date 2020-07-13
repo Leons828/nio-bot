@@ -128,9 +128,11 @@ schedule.scheduleJob('59 9 * * *', async function() {
         }
       })
       setTimeout(async function() {
-        room.say(generateAdvice(), ...illegalMembers)
-        console.log('Illegal names in: ' + await room.topic())
-        console.log(illegalNames)
+        if (illegalMembers.length > 0) {
+          room.say(generateAdvice(), ...illegalMembers)
+          console.log('Illegal names in: ' + await room.topic())
+          console.log(illegalNames)
+        }
       }, 60 * 1000)
     }
     

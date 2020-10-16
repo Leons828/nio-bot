@@ -30,8 +30,8 @@ function generateWelcome (username) {
             '① 请复制并修改群昵称:\n\n' +
             '蔚来昵称-ES6-京ADXXXXX\n\n' +
             '(无牌请先使用\"京ADXXXXX\")\n\n' +
-	    '② 注册京蔚军会员小程序\n' +
-	    'nbc.9.sart.cc/d/193\n\n' +
+	          '② 注册京蔚军会员小程序\n' +
+	          'nbc.9.sart.cc/d/193\n\n' +
             '③ 和大家打个招呼\n' +
             '④ 正式成为京蔚軍的一员'
 }

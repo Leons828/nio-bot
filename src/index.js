@@ -147,7 +147,10 @@ schedule.scheduleJob('0 12,22 * * *', async () => {
     Room.findOne({roomId: room.id, checkinNotice: true}, function(err, res) {
       if (err) {console.log(err)}
       if (res) {
-        room.say(FileBox.fromFile('./src/asset/12.jpeg'))
+        room.say(generateCheckin() + 
+                '\n今天不要忘记APP签到！\n' +
+                'nbc.9.sart.cc/all'
+        )
       }
     })
   }
@@ -160,7 +163,10 @@ schedule.scheduleJob('1 0 * * *', async () => {
     Room.findOne({roomId: room.id, checkinNotice: true}, function(err, res) {
       if (err) {console.log(err)}
       if (res) {
-        room.say(FileBox.fromFile('./src/asset/24.jpeg'))
+        room.say(generateCheckin() + 
+              '\n新的一天开始啦！\n' +
+              '可以去APP签到了！\n' + 
+              'nbc.9.sart.cc/all')
       }
     })
   }
@@ -170,6 +176,16 @@ schedule.scheduleJob('1 0 * * *', async () => {
 function generateAdvice () {
   // 加入房间回复
   return  '\n您的昵称不符合规范, 请参考:\n\n' +
-          '蔚来APP昵称-ES6-京ADXXXXX\n\n' +
-          '(未上牌牌请先使用\"京ADXXXXX\")\n'
+          '蔚来APP昵称-ES6-京AAXXXXX\n\n' +
+          '(无牌请先使用"京AAXXXXX")\n' +
+          '详细说明：nbc.9.sart.cc/d/182'
+}
+
+function generateCheckin () {
+  // 加入房间回复
+  return  '████████\n' + 
+          '█・・・・・・█\n' +
+          '█・签到提醒・█\n' +
+          '█・・・・・・█\n' +
+          '████████\n'
 }

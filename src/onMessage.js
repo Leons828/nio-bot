@@ -20,7 +20,8 @@ module.exports = async function onMessage(bot, message) {
     if (text.indexOf("查车牌") === 0 && !isSelf) {
       let list = text.split(' ')
       if (list.length !== 2) {
-        res = "\n\n查询车牌请发送\n【查车牌 京ADXXXXX】"
+        res = '\n\n查车牌请发送【查车牌 京ADXXXXX】中间一个空格' +
+              '\n\n查询更多信息请使用小程序：nbc.9.sart.cc/d/193'
         room.say(res, contact)
         return
       }
@@ -41,18 +42,20 @@ module.exports = async function onMessage(bot, message) {
               // 找到了
               let res = ''
               for (let member of members) {
-                res += '\n在' + member.groupName + '找到车友: ' + member.name
+                res += '\n在' + member.groupName + '找到车友: ' + member.name +
+                '\n\n查询更多信息请使用小程序：nbc.9.sart.cc/d/193'
               }
               room.say(res, contact)
             } else {
               // 没有找到
-              room.say('\n在京蔚军车友群中未找到 ' + plate + ' 车牌的车友', contact)
+              room.say('\n在京蔚军车友群中未找到 ' + plate + ' 车牌的车友' + '\n\n可尝试使用小程序查询：nbc.9.sart.cc/d/193', contact)
             }
           }
         })
       } else {
         // 如果输入的不为车牌格式
-        res = "\n\n查询车牌请发送\n【查车牌 京ADXXXXX】"
+        res = '\n\n查车牌请发送【查车牌 京ADXXXXX】中间一个空格' +
+        '\n\n查询更多信息请使用小程序：nbc.9.sart.cc/d/193'
         room.say(res, contact)
       }
     }

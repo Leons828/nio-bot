@@ -42,9 +42,9 @@ module.exports = async function onMessage(bot, message) {
               // 找到了
               let res = ''
               for (let member of members) {
-                res += '\n在' + member.groupName + '找到车友: ' + member.name +
-                '\n\n查询更多信息请使用小程序：nbc.9.sart.cc/d/193'
+                res += '\n在' + member.groupName + '找到车友: ' + member.name 
               }
+              res += '\n\n查询更多信息请使用小程序：nbc.9.sart.cc/d/193'
               room.say(res, contact)
             } else {
               // 没有找到

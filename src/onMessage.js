@@ -27,7 +27,7 @@ module.exports = async function onMessage(bot, message) {
       }
       let plate = list[1].toUpperCase()
       
-      if (plate === '京ADXXXXX') {
+      if (plate === '京ADXXXXX' || plate === '京AAXXXXX') {
         res = "\n你想累死我吗?那么多没改车牌的![旺柴]"
         room.say(res, contact)
         return
